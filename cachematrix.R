@@ -10,16 +10,16 @@ makeCacheMatrix <- function(x = matrix()) {
         }
         get <- function() { x }
   
-        setmatrixinverse <- function (matrix) { thematrix <<- matrix }
+        setinverse <- function (matrix) { thematrix <<- matrix }
         # this is called by cacheSolve() during the first cacheSolve()
         # access and it will store the value using superassignment
-        getmatrixinverse <- function() { thematrix } 
+        getinverse <- function() { thematrix } 
         # this will return the cached value to cacheSolve() on
         # subsequent accesses
         
         list(get = get, set=set,# OK, this is accessed each time makeCacheMatrix() is called,
-             setmatrixinverse = setmatrixinverse, # that is, each time we make a new object. This is a list of
-             getmatrixinverse = getmatrixinverse) # the internal functions ('methods') so a calling function
+             setinverse = setinverse, # that is, each time we make a new object. This is a list of
+             getinverse = getinverse) # the internal functions ('methods') so a calling function
         # knows how to access those methods.
 }
 
@@ -30,7 +30,7 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x', if cached, return cache
-        thematrix <- x$getmatrixinverse()
+        thematrix <- x$getinverse()
         ## Gets the value of the matrix from the object x
         if(!is.null(thematrix)) {
                 message("getting cached data")
@@ -44,8 +44,8 @@ cacheSolve <- function(x, ...) {
         ## gets the value of x 
         thematrix <- solve(data, ...)
         ##computes the inverse of x and saves it the variable thematrix
-        x$setmatrixinverse(thematrix)
+        x$setinverse(thematrix)
         ## passes the value of x to the function cachematrix through superassignment 
         thematrix 
-        ##returns the inverse of the matrix 
+        ##returns the matrix, now inverted
 }
